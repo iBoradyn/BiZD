@@ -45,9 +45,6 @@ print(f'Podstawowe statystyki dla napoju pepsi:\n{pepsi_stats}')
 
 
 # Zadanie 4
-print()
-print('===================Zadanie 4===================')
-
 df = pd.read_csv('brain_size.csv', sep=';')
 plt.figure(figsize=(15, 5))
 
