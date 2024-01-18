@@ -23,18 +23,19 @@ END;
 -- SELECT * FROM DEPARTMENTS;
 
 -- Zadanie 3
--- CREATE TABLE NOWA (
---     WARTOSC VARCHAR(10)
--- );
--- DECLARE
--- BEGIN
---     FOR i IN 1..10 LOOP
---         IF i NOT IN (4, 6) THEN
---             INSERT INTO NOWA(WARTOSC) VALUES (TO_CHAR(i));
---         END IF;
---     END LOOP;
--- END;
--- SELECT * FROM NOWA;
+CREATE TABLE NOWA (
+    WARTOSC VARCHAR(10)
+);
+
+DECLARE
+BEGIN
+    FOR i IN 1..10 LOOP
+        IF i NOT IN (4, 6) THEN
+            INSERT INTO NOWA(WARTOSC) VALUES (TO_CHAR(i));
+        END IF;
+    END LOOP;
+END;
+SELECT * FROM NOWA;
 
 -- Zadanie 4
 DECLARE
