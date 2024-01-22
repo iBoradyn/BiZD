@@ -28,3 +28,5 @@ ujson==5.9.0
 urllib3==2.1.0
 websockets==12.0
 yarl==1.9.4
+scikit-learn==1.4.0
+matplotlib==3.8.2
