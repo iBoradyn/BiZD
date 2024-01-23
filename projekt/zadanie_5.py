@@ -18,8 +18,18 @@ forecast_column = 'open'
 future_date = '2024-01-23 12:00:00'
 
 regressions_models = {
-    'Regresja liniowa': LinearRegression(),
-    'Regresja wielomianowa': make_pipeline(PolynomialFeatures(2), LinearRegression()),
+    'linear': {
+        'name': 'Regresja liniowa',
+        'model': LinearRegression(),
+        'color': 'red',
+        'forecast_value': None,
+    },
+    'polynomial': {
+        'name': 'Regresja wielomianowa',
+        'model': make_pipeline(PolynomialFeatures(2), LinearRegression()),
+        'color': 'black',
+        'forecast_value': None,
+    },
 }
 
 for code in codes:
@@ -29,21 +39,47 @@ for code in codes:
     y = code_df[forecast_column].values
     future_datetime = pd.to_datetime(future_date)
 
-    fig, ax = plt.subplots(1, 2, figsize=(50, 30), )
-    for index, (regression_name, regression_model) in enumerate(regressions_models.items()):
-        model = regression_model
+    fig, ax = plt.subplots(figsize=(20, 20))
+    ax.scatter(
+        code_df['dateTime'],
+        y,
+        label='Dane rzeczywiste',
+    )
+    for regression, regression_model in regressions_models.items():
+        model = regression_model['model']
+        color = regression_model['color']
         model.fit(X, y)
         y_pred = model.predict(X)
         forecast_value = model.predict(np.array([[future_datetime.timestamp()]]))
+        regression_model['forecast_value'] = forecast_value[0]
 
-        ax[index].scatter(code_df['dateTime'], y, label='Dane rzeczywiste')
-        ax[index].scatter(future_datetime, forecast_value, label=f'Przewidziana wartość ({forecast_value[0]})', color='red',marker='*')
-        ax[index].plot(code_df['dateTime'], y_pred, color='red', label=regression_name)
-        ax[index].xaxis.set_major_formatter(DateFormatter("%Y-%m-%d %H:%M:%S"))
-        ax[index].tick_params(axis='x', rotation=45)
-        ax[index].set_xlabel('Data')
-        ax[index].set_ylabel(forecast_column)
-        ax[index].legend(fontsize=30)
-        ax[index].set_title(f'{code} - {regression_name} dla kolumny "{forecast_column}"', fontsize='50')
+        ax.scatter(
+            future_datetime,
+            forecast_value,
+            label=f'{regression_model['name']} - przewidziana wartość',
+            color=color,
+            marker='x',
+        )
+        ax.plot(
+            code_df['dateTime'],
+            y_pred,
+            color=color,
+            label=regression_model['name'],
+        )
 
+    ax.xaxis.set_major_formatter(DateFormatter("%Y-%m-%d %H:%M:%S"))
+    plt.xticks(rotation=45)
+    plt.xlabel('Data')
+    plt.ylabel(forecast_column)
+    plt.legend(fontsize=20)
+    fig.text(
+        0.5,
+        -0.01,
+        f'Przewidziana wartość według regresji liniowej: {regressions_models['linear']['forecast_value']}\n'
+        f'Przewidziana wartość według regresji wielomianowej: {regressions_models['polynomial']['forecast_value']}\n',
+        ha='center',
+        fontsize=20,
+        color='blue',
+    )
+    plt.title(f'{code} - Regresja liniowa i wielomianowa dla kolumny "{forecast_column}"', fontsize=20)
     plt.show()
