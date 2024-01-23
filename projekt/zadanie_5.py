@@ -45,6 +45,28 @@ for code in codes:
         y,
         label='Dane rzeczywiste',
     )
+
+    new_code_df = pd.read_csv(f'binance_data_new/{code}.csv')
+    new_code_df['dateTime'] = pd.to_datetime(new_code_df['dateTime'])
+
+    real_value = new_code_df[new_code_df['dateTime'] == future_date][forecast_column].values[0]
+    new_code_df.drop(new_code_df[new_code_df['dateTime'] == future_date].index, inplace=True)
+
+    ax.scatter(
+        new_code_df['dateTime'],
+        new_code_df[forecast_column].values,
+        label='Nowe dane rzeczywiste',
+        color='green',
+    )
+
+    ax.scatter(
+        future_datetime,
+        real_value,
+        label='Faktyczna wartość',
+        color='green',
+        marker='x',
+    )
+
     for regression, regression_model in regressions_models.items():
         model = regression_model['model']
         color = regression_model['color']
@@ -76,9 +98,10 @@ for code in codes:
         0.5,
         -0.01,
         f'Przewidziana wartość według regresji liniowej: {regressions_models["linear"]["forecast_value"]}\n'
-        f'Przewidziana wartość według regresji wielomianowej: {regressions_models["polynomial"]["forecast_value"]}\n',
+        f'Przewidziana wartość według regresji wielomianowej: {regressions_models["polynomial"]["forecast_value"]}\n'
+        f'Faktyczna wartość: {real_value}\n',
         ha='center',
-        fontsize=20,
+        fontsize=15,
         color='blue',
     )
     plt.title(f'{code} - Regresja liniowa i wielomianowa dla kolumny "{forecast_column}"', fontsize=20)
