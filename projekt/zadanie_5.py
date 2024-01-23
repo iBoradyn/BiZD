@@ -56,7 +56,7 @@ for code in codes:
         ax.scatter(
             future_datetime,
             forecast_value,
-            label=f'{regression_model['name']} - przewidziana wartość',
+            label=f'{regression_model["name"]} - przewidziana wartość',
             color=color,
             marker='x',
         )
@@ -75,8 +75,8 @@ for code in codes:
     fig.text(
         0.5,
         -0.01,
-        f'Przewidziana wartość według regresji liniowej: {regressions_models['linear']['forecast_value']}\n'
-        f'Przewidziana wartość według regresji wielomianowej: {regressions_models['polynomial']['forecast_value']}\n',
+        f'Przewidziana wartość według regresji liniowej: {regressions_models["linear"]["forecast_value"]}\n'
+        f'Przewidziana wartość według regresji wielomianowej: {regressions_models["polynomial"]["forecast_value"]}\n',
         ha='center',
         fontsize=20,
         color='blue',
