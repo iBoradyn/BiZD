@@ -32,7 +32,6 @@ BEGIN
     EXCEPTION
     WHEN OTHERS THEN
         RAISE NOTICE 'Error occurred: %', SQLERRM;
-        RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -57,7 +56,6 @@ BEGIN
     EXCEPTION
     WHEN OTHERS THEN
         RAISE NOTICE 'Error occurred: %', SQLERRM;
-        RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 -- -----------------------------------------------------------------------------
@@ -85,7 +83,7 @@ FOR EACH ROW EXECUTE FUNCTION archive_deleted_code();
 CREATE OR REPLACE FUNCTION archive_deleted_history() RETURNS TRIGGER AS $$
 	BEGIN
 		INSERT INTO exchange_history_archive(id, code_id, dateTime, open, high, low, close, volume)
-		VALUES (OLD.id, OLD.code_id, OLD.dateTime, OLD.open, OLD.high, OLD.low, OLD.close, OLD.volume)
+		VALUES (OLD.id, OLD.code_id, OLD.dateTime, OLD.open, OLD.high, OLD.low, OLD.close, OLD.volume);
 		RETURN OLD;
     EXCEPTION
     WHEN OTHERS THEN
@@ -110,13 +108,13 @@ CREATE TABLE activity_log (
     operation_type VARCHAR(50),
     operation_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_name VARCHAR(100)
-)
+);
 
 
 CREATE OR REPLACE FUNCTION log_exchange_codes_and_history_operation() RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO activity_log(table_name, operation_type, user_name)
-    VALUES (NEW::regclass, TG_OP, CURRENT_USER);
+    VALUES (TG_TABLE_NAME::regclass::text, TG_OP, CURRENT_USER);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
