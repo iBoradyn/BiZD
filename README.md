@@ -18,7 +18,7 @@ https://www.binance.com/
 ### Baza danych
 PostgreSQL
 
-### Opis
+### Opis danych
 Za pomocą API zostały pobrane informacje o sprzedaży pięciu różnych kryptowalut w dniach 15.01.2024 - 22.01.2024.
 Zbiory danych przedstawiają kurs wybranej waluty na wartość dolara amerykańskiego co godzinę i zawierają następujące informacje:
 - Data i godzina rozpoczęcia sprzedaży
